@@ -1,9 +1,9 @@
 package main
 
 import (
-	"baseTechnical/src/concurrent"
-	"baseTechnical/src/sequential"
-	"baseTechnical/src/utils"
+	"baseTechnical/src/pkg/concurrent"
+	"baseTechnical/src/pkg/sequential"
+	"baseTechnical/src/pkg/utils"
 	"fmt"
 	"os"
 	"time"

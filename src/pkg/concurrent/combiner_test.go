@@ -1,7 +1,6 @@
 package concurrent
 
 import (
-	"baseTechnical/src/concurrent"
 	"context"
 	"reflect"
 	"testing"
@@ -10,13 +9,13 @@ import (
 func TestCombiner(t *testing.T) {
 	ctx := context.Background()
 
-	workerInput1 := make(chan concurrent.Processed)
-	workerInput2 := make(chan concurrent.Processed)
+	workerInput1 := make(chan Processed)
+	workerInput2 := make(chan Processed)
 
 	go func() {
 		defer close(workerInput1)
 
-		workerInput1 <- concurrent.Processed{
+		workerInput1 <- Processed{
 			UniqueAddresses: map[string]bool{"1.1.1.1": true, "2.2.2.2": true},
 			IpActivity:      map[string]int{"1.1.1.1": 2, "2.2.2.2": 2},
 			UrlVisits:       map[string]int{"/urlOne": 3, "urlTwo": 1},
@@ -26,14 +25,14 @@ func TestCombiner(t *testing.T) {
 	go func() {
 		defer close(workerInput2)
 
-		workerInput2 <- concurrent.Processed{
+		workerInput2 <- Processed{
 			UniqueAddresses: map[string]bool{"1.1.1.1": true, "2.2.2.2": true},
 			IpActivity:      map[string]int{"1.1.1.1": 1, "2.2.2.2": 4},
 			UrlVisits:       map[string]int{"/urlOne": 2, "urlTwo": 3},
 		}
 	}()
 
-	output := concurrent.Combiner(ctx, workerInput1, workerInput2)
+	output := combiner(ctx, workerInput1, workerInput2)
 
 	uniqueAddresses := make(map[string]bool)
 	ipActivity := make(map[string]int)

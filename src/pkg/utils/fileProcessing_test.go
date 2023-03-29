@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"baseTechnical/src/utils"
 	"reflect"
 	"testing"
 )
@@ -31,7 +30,7 @@ func TestProcessRow(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := utils.ProcessRow(tt.args.line)
+			got, got1 := ProcessRow(tt.args.line)
 			if got != tt.want {
 				t.Errorf("ProcessRow() got = %v, want %v", got, tt.want)
 			}
@@ -49,17 +48,17 @@ func TestProcessIPActivity(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want []utils.IP
+		want []IP
 	}{
 		{
 			name: "should process IP activity as expected",
 			args: args{ipActivity: map[string]int{"155.121.21.34": 4, "177.40.21.254": 2, "139.21.44.109": 3, "177.71.128.21": 5}},
-			want: []utils.IP{{Ip: "177.71.128.21", Count: 5}, {Ip: "155.121.21.34", Count: 4}, {Ip: "139.21.44.109", Count: 3}},
+			want: []IP{{Ip: "177.71.128.21", Count: 5}, {Ip: "155.121.21.34", Count: 4}, {Ip: "139.21.44.109", Count: 3}},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := utils.ProcessIPActivity(tt.args.ipActivity); !reflect.DeepEqual(got, tt.want) {
+			if got := ProcessIPActivity(tt.args.ipActivity); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ProcessIPActivity() = %v, want %v", got, tt.want)
 			}
 		})
@@ -73,17 +72,17 @@ func TestProcessURLVisits(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want []utils.URL
+		want []URL
 	}{
 		{
 			name: "should process URL visits as expected",
 			args: args{urlVisits: map[string]int{"/siteone": 50, "/sitetwo": 34, "/sitethree": 11, "/sitefour": 24}},
-			want: []utils.URL{{URL: "/siteone", Count: 50}, {URL: "/sitetwo", Count: 34}, {URL: "/sitefour", Count: 24}},
+			want: []URL{{URL: "/siteone", Count: 50}, {URL: "/sitetwo", Count: 34}, {URL: "/sitefour", Count: 24}},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := utils.ProcessURLVisits(tt.args.urlVisits); !reflect.DeepEqual(got, tt.want) {
+			if got := ProcessURLVisits(tt.args.urlVisits); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ProcessURLVisits() = %v, want %v", got, tt.want)
 			}
 		})
@@ -127,7 +126,7 @@ func TestValidateURL(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := utils.ValidateURL(tt.args.urlString); got != tt.want {
+			if got := ValidateURL(tt.args.urlString); got != tt.want {
 				t.Errorf("ValidateURL() = %v, want %v", got, tt.want)
 			}
 		})
@@ -181,7 +180,7 @@ func TestValidateIPAddress(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := utils.ValidateIPAddress(tt.args.ipAddress); got != tt.want {
+			if got := ValidateIPAddress(tt.args.ipAddress); got != tt.want {
 				t.Errorf("ValidateIPv4Address() = %v, want %v", got, tt.want)
 			}
 		})

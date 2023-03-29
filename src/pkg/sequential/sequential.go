@@ -1,7 +1,7 @@
 package sequential
 
 import (
-	"baseTechnical/src/utils"
+	"baseTechnical/src/pkg/utils"
 	"bufio"
 	"log"
 	"os"

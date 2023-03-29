@@ -1,7 +1,6 @@
 package concurrent
 
 import (
-	"baseTechnical/src/concurrent"
 	"context"
 	"reflect"
 	"testing"
@@ -12,7 +11,7 @@ func TestWorker(t *testing.T) {
 
 	input := make(chan []string)
 
-	output := concurrent.Worker(ctx, input)
+	output := worker(ctx, input)
 
 	testRows := []string{
 		`79.125.111.21 - - [10/Jul/2018:20:03:40 +0200] "GET /newsletter/ HTTP/1.1" 200 3574 "-" "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)`,
@@ -27,7 +26,7 @@ func TestWorker(t *testing.T) {
 
 	result := <-output
 
-	expected := concurrent.Processed{
+	expected := Processed{
 		UniqueAddresses: map[string]bool{"79.125.111.21": true, "221.112.111.11": true, "72.44.32.10": true},
 		IpActivity:      map[string]int{"79.125.111.21": 1, "221.112.111.11": 1, "72.44.32.10": 1},
 		UrlVisits:       map[string]int{"/newsletter/": 1, "/docs/manage-websites/": 2},

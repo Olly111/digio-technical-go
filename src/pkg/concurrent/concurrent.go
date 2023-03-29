@@ -1,7 +1,7 @@
 package concurrent
 
 import (
-	"baseTechnical/src/utils"
+	"baseTechnical/src/pkg/utils"
 	"context"
 	"log"
 	"os"
@@ -28,17 +28,17 @@ func Concurrent(filename string, batchSize int, numWorkers int) (int, []utils.IP
 	defer cancel()
 
 	rowsBatch := []string{}
-	rowsChannel := Reader(ctx, &rowsBatch, file, batchSize)
+	rowsChannel := reader(ctx, &rowsBatch, file, batchSize)
 
 	// Spawn workers
 	workersChannel := make([]<-chan Processed, numWorkers)
 	for i := 0; i < numWorkers; i++ {
 		// Give each worker a batch of rows
-		workersChannel[i] = Worker(ctx, rowsChannel)
+		workersChannel[i] = worker(ctx, rowsChannel)
 	}
 
 	// Populating result maps
-	for Processed := range Combiner(ctx, workersChannel...) {
+	for Processed := range combiner(ctx, workersChannel...) {
 		for ip := range Processed.UniqueAddresses {
 			uniqueAddresses[ip] = true
 		}
