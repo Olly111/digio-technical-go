@@ -1,12 +1,10 @@
 # Base Technical Solution (Golang)
 
----
-
 ## Overview + Key Decisions
 
 This project was created as an improved alternative to my original 2021 solution using Python + Regular Expressions for the purposes of the Digio Base Engineer Technical Assessment.
 
-The decision to recreate the solution using Golang comes after participating in Song & Roman's Go Training in September 2022. My aim was to approach the solution in the most practical way possible, i.e. my native JavaScript would most likely never be used for processing data like this. In my opinion this use case would be better suited to be solved in a more backend focused language (like Go) and through implementing this solution have taught myself the basics of concurrency in Go, as well as unit testing, channels, goroutines and waitgroups.
+The decision to recreate the solution using Golang comes after participating in Song & Roman's Go Training in September 2022. My aim was to approach the solution in the most practical way possible, i.e. my native JavaScript would most likely never be used for processing data like this. In my opinion this use case would be better suited to be solved in a more backend focused language (like Go), I imagine this solution to be used by someone within the data domain who has potentially vast amounts of HTTP logs to gather valuable analytics from and subsequently, could potentially have millions of logs to scan. Through implementing this solution have taught myself the basics of concurrency in Go, as well as unit testing, channels, goroutines and waitgroups.
 
 Go presents a much faster way to process files like the ones provided in the `/data` folder in this repo, by utilising Concurrency. I came across a blog post outlining how to process large files by splitting them into separate goroutines to be processed concurrently, then spliced back together to draw results from - this paradigm of Split -> Process -> Combine is what this concurrent solution is based on.
 
@@ -45,6 +43,7 @@ Disadvantages vs. Original Python solution:
 
 - The data can contain erroneous logs
 - Each log is on a separate line
+- If the IP address or URL is invalid for any particular log, we don't want it's data recorded as it would not be a valid log and contains erroneous data
 - Olly is challenging himself as to how quickly he can make the program run ⚡️😂
 
 ---
