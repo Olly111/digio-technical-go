@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-func Combiner(ctx context.Context, inputs ...<-chan Processed) <-chan Processed {
+func combiner(ctx context.Context, inputs ...<-chan Processed) <-chan Processed {
 	output := make(chan Processed)
 
 	var waitgroup sync.WaitGroup

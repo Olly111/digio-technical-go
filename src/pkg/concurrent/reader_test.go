@@ -1,7 +1,6 @@
 package concurrent
 
 import (
-	"baseTechnical/src/concurrent"
 	"context"
 	"os"
 	"testing"
@@ -14,13 +13,13 @@ func TestReaderOutput(t *testing.T) {
 	defer cancel()
 
 	// Assert that Reader should split rows from file into batches for processing
-	testFile, err := os.Open("../testData/reader_test.log")
+	testFile, err := os.Open("../../testData/reader_test.log")
 	if err != nil {
 		t.Fatal("Error opening file", err)
 	}
 	defer testFile.Close()
 
-	splitRowsChannel := concurrent.Reader(ctx, &[]string{}, testFile, 2)
+	splitRowsChannel := reader(ctx, &[]string{}, testFile, 2)
 	expectedSplitRows := [][]string{{"line1", "line2"}, {"line3", "line4"}, {"line5", "line6"}, {"line7"}}
 
 	for i := range expectedSplitRows {
@@ -28,7 +27,7 @@ func TestReaderOutput(t *testing.T) {
 	}
 
 	// Assert that Reader should close when ctx cancels
-	closedContext := concurrent.Reader(ctx, &[]string{}, testFile, 2)
+	closedContext := reader(ctx, &[]string{}, testFile, 2)
 	cancel()
 	_, ok := <-closedContext
 	assert.False(t, ok)

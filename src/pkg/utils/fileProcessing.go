@@ -30,6 +30,7 @@ func ProcessRow(line string) (string, string) {
 	return rowData[0], rowData[6]
 }
 
+// Returns the 3 most frequently occurring IP Addresses
 func ProcessIPActivity(ipActivity map[string]int) []IP {
 
 	mostActiveIPs := []IP{}
@@ -40,7 +41,6 @@ func ProcessIPActivity(ipActivity map[string]int) []IP {
 		}
 	}
 
-	// Sort slice in descending order
 	sort.Slice(mostActiveIPs, func(i, j int) bool {
 		return mostActiveIPs[i].Count > mostActiveIPs[j].Count
 	})
@@ -48,6 +48,7 @@ func ProcessIPActivity(ipActivity map[string]int) []IP {
 	return mostActiveIPs[:3]
 }
 
+// Returns the 3 most frequently occurring URLs
 func ProcessURLVisits(urlVisits map[string]int) []URL {
 	mostVisitedURLs := []URL{}
 
@@ -57,7 +58,6 @@ func ProcessURLVisits(urlVisits map[string]int) []URL {
 		}
 	}
 
-	// Sort slice in descending order
 	sort.Slice(mostVisitedURLs, func(i, j int) bool {
 		return mostVisitedURLs[i].Count > mostVisitedURLs[j].Count
 	})

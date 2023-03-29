@@ -6,7 +6,9 @@
 
 This project was created as an improved alternative to my original 2021 solution using Python + Regular Expressions for the purposes of the Digio Base Engineer Technical Assessment.
 
-The decision to recreate the solution using Golang comes after participating in Song & Roman's Go Training in September 2022. Go presents a much faster way to process files like the ones provided in the `/data` folder in this repo, by utilising Concurrency. I came across a blog post outlining how to split lines of files into separate goroutines to be processed concurrently, then spliced back together to draw results from - this paradigm of Split -> Process -> Combine is what this concurrent solution is based on.
+The decision to recreate the solution using Golang comes after participating in Song & Roman's Go Training in September 2022. My aim was to approach the solution in the most practical way possible, i.e. my native JavaScript would most likely never be used for processing data like this. In my opinion this use case would be better suited to be solved in a more backend focused language (like Go) and through implementing this solution have taught myself the basics of concurrency in Go, as well as unit testing, channels, goroutines and waitgroups.
+
+Go presents a much faster way to process files like the ones provided in the `/data` folder in this repo, by utilising Concurrency. I came across a blog post outlining how to process large files by splitting them into separate goroutines to be processed concurrently, then spliced back together to draw results from - this paradigm of Split -> Process -> Combine is what this concurrent solution is based on.
 
 This repo also contains a solution that sequentially processes lines from a file - purely to outline the difference in the speed of processing between the two methods (Sequential vs. Concurrent).
 
@@ -84,10 +86,10 @@ The sequential solution is quite simple, it opens the file, reads the data line 
 The concurrent solution's execution is as follows:
 
 1. The file is opened
-2. The Reader function returns a channel of batched rows `chan []string` to be passed to workers
-3. A number of Workers (specified at runtime by the user) are spawned and are used to populate a channel, eventually containing all of their respective processed results, and each read a batch of rows from the Reader
-4. Each Worker processes it's batch of rows in a similar fashion to the sequential solution, only returning the output in a channel
-5. The Combiner is started, taking in the channel of Worker's outputs, and are multiplexed (read through sequentially, combining the results into a single map for unique IPs, IP activity, and URL visits) until the Workers channel is empty
+2. The `reader` function returns a channel of batched rows `chan []string` to be passed to workers
+3. A number of `workers` (specified at runtime by the user) are spawned and are used to populate a channel, eventually containing all of their respective processed results, and each read a batch of rows from the `reader`
+4. Each `worker` processes it's batch of rows in a similar fashion to the sequential solution, only returning the output in a channel
+5. The `combiner` is started, taking in the channel of `worker`'s outputs, and are multiplexed (read through sequentially, combining the results into a single map for unique IPs, IP activity, and URL visits) until the `workers` channel is empty
 6. Each combined map is read through into the resulting maps incrementing IP activity & URL visits, and recording unique IP addresses
 7. In `main.go` the resulting data are displayed in the console to the user
 

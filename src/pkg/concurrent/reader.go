@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func Reader(ctx context.Context, rowsBatch *[]string, file *os.File, batchSize int) <-chan []string {
+func reader(ctx context.Context, rowsBatch *[]string, file *os.File, batchSize int) <-chan []string {
 	output := make(chan []string)
 
 	scanner := bufio.NewScanner(file)

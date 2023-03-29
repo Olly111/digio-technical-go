@@ -1,15 +1,16 @@
-package sequential
+package concurrent
 
 import (
-	"baseTechnical/src/sequential"
-	"baseTechnical/src/utils"
+	"baseTechnical/src/pkg/utils"
 	"reflect"
 	"testing"
 )
 
-func TestSequential(t *testing.T) {
+func TestConcurrent(t *testing.T) {
 	type args struct {
-		filename string
+		filename   string
+		batchSize  int
+		numWorkers int
 	}
 	tests := []struct {
 		name  string
@@ -19,8 +20,8 @@ func TestSequential(t *testing.T) {
 		want2 []utils.URL
 	}{
 		{
-			name:  "Test Sequential Processing",
-			args:  args{"../testData/test.log"},
+			name:  "Test Concurrent Processing",
+			args:  args{filename: "../../testData/test.log", batchSize: 6, numWorkers: 6},
 			want:  11,
 			want1: []utils.IP{{Ip: "177.71.128.21", Count: 10}, {Ip: "72.44.32.10", Count: 7}, {Ip: "168.41.191.40", Count: 4}},
 			want2: []utils.URL{{URL: "/intranet-analytics/", Count: 10}, {URL: "/translations/", Count: 5}, {URL: "/docs/manage-websites/", Count: 4}},
@@ -28,22 +29,22 @@ func TestSequential(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1, got2 := sequential.Sequential(tt.args.filename)
+			got, got1, got2 := Concurrent(tt.args.filename, tt.args.batchSize, tt.args.numWorkers)
 			if got != tt.want {
-				t.Errorf("Sequential() got = %v, want %v", got, tt.want)
+				t.Errorf("Concurrent() got = %v, want %v", got, tt.want)
 			}
 			if !reflect.DeepEqual(got1, tt.want1) {
-				t.Errorf("Sequential() got1 = %v, want %v", got1, tt.want1)
+				t.Errorf("Concurrent() got1 = %v, want %v", got1, tt.want1)
 			}
 			if !reflect.DeepEqual(got2, tt.want2) {
-				t.Errorf("Sequential() got2 = %v, want %v", got2, tt.want2)
+				t.Errorf("Concurrent() got2 = %v, want %v", got2, tt.want2)
 			}
 		})
 	}
 }
 
-func BenchmarkSequential(b *testing.B) {
+func BenchmarkConcurrent(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		sequential.Sequential("../testData/test.log")
+		Concurrent("../../testData/test.log", 6, 6)
 	}
 }

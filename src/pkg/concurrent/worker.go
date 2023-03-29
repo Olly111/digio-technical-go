@@ -1,11 +1,11 @@
 package concurrent
 
 import (
-	"baseTechnical/src/utils"
+	"baseTechnical/src/pkg/utils"
 	"context"
 )
 
-func Worker(ctx context.Context, rowBatch <-chan []string) <-chan Processed {
+func worker(ctx context.Context, rowBatch <-chan []string) <-chan Processed {
 	output := make(chan Processed)
 
 	go func() {
