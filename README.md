@@ -61,7 +61,11 @@ Disadvantages vs. Original Python solution:
   - `go run src/main.go concurrent extended` - Uses concurrent processing on the log with 400,000 entries
   - `go run src/main.go sequential short` - Uses sequential processing on the log with 34 entries
 
-5. Ta-da!
+5. To run all tests:
+
+- `go test ./...`
+
+6. Ta-da!
 
 ---
 
