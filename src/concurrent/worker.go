@@ -17,6 +17,7 @@ func Worker(ctx context.Context, rowBatch <-chan []string) <-chan Processed {
 			UrlVisits:       make(map[string]int),
 		}
 
+		// Process rows in batch
 		for rowBatch := range rowBatch {
 			for _, row := range rowBatch {
 				ip, url := utils.ProcessRow(row)
@@ -26,6 +27,7 @@ func Worker(ctx context.Context, rowBatch <-chan []string) <-chan Processed {
 			}
 		}
 
+		// Read processed data into output
 		output <- processed
 	}()
 

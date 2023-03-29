@@ -23,6 +23,7 @@ func Reader(ctx context.Context, rowsBatch *[]string, file *os.File, batchSize i
 			default:
 				row := scanner.Text()
 
+				// Read rows into output channel when batchSize is reached or EOF and set rowsBatch to empty
 				if len(*rowsBatch) == batchSize || !scanned {
 					output <- *rowsBatch
 					*rowsBatch = []string{}
@@ -30,6 +31,7 @@ func Reader(ctx context.Context, rowsBatch *[]string, file *os.File, batchSize i
 				*rowsBatch = append(*rowsBatch, row)
 			}
 
+			// Last batch will have been added, exit goroutine and return output
 			if !scanned {
 				return
 			}

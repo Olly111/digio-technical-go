@@ -3,50 +3,65 @@ package main
 import (
 	"baseTechnical/src/concurrent"
 	"baseTechnical/src/sequential"
+	"baseTechnical/src/utils"
 	"fmt"
+	"os"
 	"time"
 )
 
-func main() {
-	// uniqueAddresses, ipActivity, urlVisits := sequential.Sequential(`test.log`)
-
-	// fmt.Println("No. unique IP addresses:", uniqueAddresses)
-	// fmt.Println("IP Activity:")
-	// fmt.Println("1:", ipActivity[0].Count, ipActivity[0].Ip)
-	// fmt.Println("2:", ipActivity[1].Count, ipActivity[1].Ip)
-	// fmt.Println("3:", ipActivity[2].Count, ipActivity[2].Ip)
-	// fmt.Println("URL Visits:")
-	// fmt.Println("1:", urlVisits[0].Count, urlVisits[0].URL)
-	// fmt.Println("2:", urlVisits[1].Count, urlVisits[1].URL)
-	// fmt.Println("3:", urlVisits[2].Count, urlVisits[2].URL)
-
-	uniqueAddresses, ipActivity, urlVisits := concurrent.Concurrent(`data/example-data.log`, 5, 5)
-
+func displayResults(uniqueAddresses int, ipActivity []utils.IP, urlVisits []utils.URL) {
 	fmt.Println("No. unique IP addresses:", uniqueAddresses)
 	fmt.Println("IP Activity:")
-	fmt.Println("1:", ipActivity[0].Count, ipActivity[0].Ip)
-	fmt.Println("2:", ipActivity[1].Count, ipActivity[1].Ip)
-	fmt.Println("3:", ipActivity[2].Count, ipActivity[2].Ip)
+	for i := range ipActivity {
+		fmt.Printf("%v: %v, %v\n", (i + 1), ipActivity[i].Count, ipActivity[i].Ip)
+	}
 	fmt.Println("URL Visits:")
-	fmt.Println("1:", urlVisits[0].Count, urlVisits[0].URL)
-	fmt.Println("2:", urlVisits[1].Count, urlVisits[1].URL)
-	fmt.Println("3:", urlVisits[2].Count, urlVisits[2].URL)
+	for i := range ipActivity {
+		fmt.Printf("%v: %v, %v\n", (i + 1), urlVisits[i].Count, urlVisits[i].URL)
+	}
+}
 
-	reps := 1
-	start := time.Now()
+func getFilename(selectedData string) string {
+	if selectedData == "short" {
+		return `data/example-data.log`
+	}
+	return `data/example-data-extended.log`
+}
 
-	for i := 0; i < reps; i++ {
-		sequential.Sequential(`data/example-data-extended.log`)
+func getOptimalBatchAndWorkerSize(selectedData string) (int, int) {
+	if selectedData == "short" {
+		return 5, 5
+	}
+	return 10000, 40
+}
+
+func main() {
+	timerStart := time.Now()
+
+	args := os.Args
+
+	if len(args) < 3 {
+		fmt.Println("Please give command line arguments for demo purposes")
+		fmt.Println("First argument: 'sequential' | 'concurrent'")
+		fmt.Println("Second argument: 'short' | 'extended'")
+		os.Exit(1)
 	}
 
-	elapsed := time.Since(start)
-	fmt.Printf("Time taken for %d repetitions (Sequential): %s\n", reps, elapsed)
+	selectedProcess := args[1]
+	selectedData := args[2]
 
-	start = time.Now()
-	for i := 0; i < reps; i++ {
-		concurrent.Concurrent(`data/example-data.log`, 5, 5)
+	localDataFile := getFilename(selectedData)
+	batchSize, numWorkers := getOptimalBatchAndWorkerSize(selectedData)
+
+	switch selectedProcess {
+	case "sequential":
+		uniqueAddresses, ipActivity, urlVisits := sequential.Sequential(localDataFile)
+		displayResults(uniqueAddresses, ipActivity, urlVisits)
+	case "concurrent":
+		uniqueAddresses, ipActivity, urlVisits := concurrent.Concurrent(localDataFile, batchSize, numWorkers)
+		displayResults(uniqueAddresses, ipActivity, urlVisits)
 	}
 
-	elapsed = time.Since(start)
-	fmt.Printf("Time taken for %d repetitions (Concurrent): %s\n", reps, elapsed)
+	elapsed := time.Since(timerStart)
+	fmt.Printf("Execution time: %s\n", elapsed)
 }

@@ -8,7 +8,6 @@ import (
 )
 
 func Sequential(filename string) (int, []utils.IP, []utils.URL) {
-
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)

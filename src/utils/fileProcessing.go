@@ -40,6 +40,7 @@ func ProcessIPActivity(ipActivity map[string]int) []IP {
 		}
 	}
 
+	// Sort slice in descending order
 	sort.Slice(mostActiveIPs, func(i, j int) bool {
 		return mostActiveIPs[i].Count > mostActiveIPs[j].Count
 	})
@@ -56,6 +57,7 @@ func ProcessURLVisits(urlVisits map[string]int) []URL {
 		}
 	}
 
+	// Sort slice in descending order
 	sort.Slice(mostVisitedURLs, func(i, j int) bool {
 		return mostVisitedURLs[i].Count > mostVisitedURLs[j].Count
 	})
