@@ -45,6 +45,11 @@ func ProcessIPActivity(ipActivity map[string]int) []IP {
 		return mostActiveIPs[i].Count > mostActiveIPs[j].Count
 	})
 
+	// Guard against access out of bounds if < 3 logs
+	if len(mostActiveIPs) < 3 {
+		return mostActiveIPs
+	}
+
 	return mostActiveIPs[:3]
 }
 
@@ -61,6 +66,11 @@ func ProcessURLVisits(urlVisits map[string]int) []URL {
 	sort.Slice(mostVisitedURLs, func(i, j int) bool {
 		return mostVisitedURLs[i].Count > mostVisitedURLs[j].Count
 	})
+
+	// Guard against access out of bounds if < 3 logs
+	if len(mostVisitedURLs) < 3 {
+		return mostVisitedURLs
+	}
 
 	return mostVisitedURLs[:3]
 }
